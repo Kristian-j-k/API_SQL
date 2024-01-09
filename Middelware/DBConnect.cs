@@ -1,5 +1,6 @@
 ﻿using API_SQL.Models;
 using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace API_SQL
 {
@@ -124,7 +125,8 @@ namespace API_SQL
                                 userID = reader.GetInt32(0);
                                 Console.WriteLine(userID);
                             }
-                            SQLLogUser(userID);
+                            SQLLogUser(userID);             //logging date.now on the user
+                           
                             return userID;
                         }
                     }
@@ -146,9 +148,11 @@ namespace API_SQL
                 using (SqlConnection connection = new SqlConnection(ConnectionString().ConnectionString))
                 {
                     Console.WriteLine("SQLNewUser\n");
+                   // DateTime currentDateTime = DateTime.Now;
+
                     connection.Open();
 
-                    String sql = "INSERT INTO users (CompanyNo, Password) VALUES("+UserID+","+Password+")";
+                    String sql = "INSERT INTO users (CompanyNo, Password) VALUES("+UserID+","+Password+ ")";
                     using (SqlCommand command = new SqlCommand(sql, connection)) 
                     {
                         using (SqlDataReader reader = command.ExecuteReader());
@@ -334,8 +338,7 @@ namespace API_SQL
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {}
+                        using (SqlDataReader reader = command.ExecuteReader()){}
                     }
                 }
             }
@@ -345,8 +348,63 @@ namespace API_SQL
             }
         }
 
+   
+
+        public void DeleteUserNotActive()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString().ConnectionString))
+                {
+
+                    connection.Open();
+                    DateTime currentDateTime = DateTime.Now;
+                    String sql = "SELECT * FROM USERS";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            Console.WriteLine("DeleteUserNotActive");
+                            while (reader.Read())
+                            {
+
+                                try
+                                {
+                                    Console.WriteLine((string)reader.GetValue(4));
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                }
+
+                                try
+                                {
+                                    Console.WriteLine((DateTime)reader.GetValue(4));
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                }
+                                //Console.WriteLine(reader.GetDateTime(4));
+                                //DateTime d = new DateTime();
+                                //    d = (DateTime)reader.GetValue(4);
+
+
+
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+           
+            }
+        }
     }
-
-
 
 }
