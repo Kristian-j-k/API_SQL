@@ -18,10 +18,10 @@ namespace API_SQL.Models
         public string TerminalTimestamp { get; set; }
         public double Latitude  { get; set; }
         public double Longitude { get; set; }
-        public string BiTimestamp { get; set; }
+        public DateTime BiTimestamp { get; set; }
         public int CompanyTraceNo { get; set; }
 
-        public CardSaleTransactions(int id, string productName, double invoiceUnitPrice, double quantity, double serverSubTotal, string serverTimestamp, double serverUnitPrice, string siteName, double siteNo, string terminalTimestamp, double latitude, double longitude, string biTimestamp, int companyTraceNo)
+        public CardSaleTransactions(int id, string productName, double invoiceUnitPrice, double quantity, double serverSubTotal, string serverTimestamp, double serverUnitPrice, string siteName, double siteNo, string terminalTimestamp, double latitude, double longitude, DateTime biTimestamp, int companyTraceNo)
         {
             Id = id;
             ProductName = productName;

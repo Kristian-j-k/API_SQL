@@ -16,7 +16,7 @@ namespace API_SQL.Controllers
         public int Get1(int CompanyNo,string Password)
         {
             int result = -1;
-            Console.WriteLine("yes1");
+
             DBConnect db = new DBConnect();
             int userID = db.SQLGetUser(CompanyNo, Password);
             if(userID != -1 )

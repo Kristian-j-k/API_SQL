@@ -18,6 +18,29 @@ namespace API_SQL
             return builder;
         }
 
+        public void SQLLogUser(int UserID)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString().ConnectionString))
+                {
+                    Console.WriteLine("SQLLogUser\n");
+
+                    connection.Open();
+                    DateTime currentDateTime = DateTime.Now;
+                    String sql = "UPDATE USERS SET logDate = '" + currentDateTime + "' WHERE id = '" + UserID + "'";
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader()) ;
+
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+        }
 
         public int SQLLatest(int UserID)
         {
@@ -28,7 +51,6 @@ namespace API_SQL
                     Console.WriteLine("SQLLatest\n");
 
                     connection.Open();
-
 
                     String sqlTableName = "SELECT TableName FROM USERS WHERE id = '" + UserID + "'";
                     string CardSaleTable_UserID = null;
@@ -79,7 +101,7 @@ namespace API_SQL
 
    
 
-        public int SQLGetUser(int UserID, string Password)
+        public int SQLGetUser(int User, string Password)
         {
             try
             {
@@ -89,20 +111,21 @@ namespace API_SQL
 
                     connection.Open();
 
-                    String sql = "SELECT id FROM USERS WHERE CompanyNo = "+UserID+" AND Password = "+Password+" ";
+                    String sql = "SELECT id FROM USERS WHERE CompanyNo = "+User+" AND Password = "+Password+" ";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        int temp = -1;
+                        int userID = -1;
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                temp = reader.GetInt32(0);
-                                Console.WriteLine(temp);
+                                userID = reader.GetInt32(0);
+                                Console.WriteLine(userID);
                             }
-                            return temp;
+                            SQLLogUser(userID);
+                            return userID;
                         }
                     }
                 }
@@ -113,6 +136,8 @@ namespace API_SQL
                 return -1;
             }
         }
+
+
 
         public int SQLNewUser(int UserID, string Password)
         {
@@ -147,11 +172,11 @@ namespace API_SQL
                     sqlTable += "InvoiceUnitPrice float,";
                     sqlTable += "Quantity float,";
                     sqlTable += "ServerSubTotal float,";
-                    sqlTable += "ServerTimestamp datetime,";
+                    sqlTable += "ServerTimestamp varchar(255),";
                     sqlTable += "ServerUnitPrice float,";
                     sqlTable += "SiteName varchar(255),";
                     sqlTable += "SiteNo float,";
-                    sqlTable += "TerminalTimestamp datetime,";
+                    sqlTable += "TerminalTimestamp varchar(255),";
                     sqlTable += "Latitude float,";
                     sqlTable += "Longitude float,";
                     sqlTable += "BiTimestamp datetime default(GETDATE()),";
@@ -247,7 +272,8 @@ namespace API_SQL
                                 c.TerminalTimestamp = (string)reader.GetValue(9);
                                 c.Latitude = (double)reader.GetValue(10);
                                 c.Longitude = (double)reader.GetValue(11);
-                                c.BiTimestamp = (string)reader.GetValue(12);
+                                c.BiTimestamp = (DateTime)reader.GetValue(12);
+                                c.CompanyTraceNo = (int)reader.GetValue(13);
 
                                 res.Add(c);
                                 
@@ -297,8 +323,9 @@ namespace API_SQL
                     into += "TerminalTimestamp"; into += ", "; values += "'"+ct.TerminalTimestamp+"'"; values += ", ";
                     into += "Latitude"; into += ", "; values += ct.Latitude; values += ", ";
                     into += "Longitude"; into += ", "; values += ct.Longitude; values += ", ";
-                    into += "BiTimestamp"; values += "'"+ct.BiTimestamp+"'";
-                  
+                    into += "CompanyTraceNo"; values += "'" + ct.CompanyTraceNo + "'";
+
+
 
                     connection.Open();
 
@@ -319,4 +346,7 @@ namespace API_SQL
         }
 
     }
+
+
+
 }
