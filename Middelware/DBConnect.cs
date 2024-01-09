@@ -148,8 +148,7 @@ namespace API_SQL
                 using (SqlConnection connection = new SqlConnection(ConnectionString().ConnectionString))
                 {
                     Console.WriteLine("SQLNewUser\n");
-                   // DateTime currentDateTime = DateTime.Now;
-
+                   
                     connection.Open();
 
                     String sql = "INSERT INTO users (CompanyNo, Password) VALUES("+UserID+","+Password+ ")";
@@ -349,16 +348,50 @@ namespace API_SQL
         }
 
    
+        public void DeleteUser(int userID, String UserTable)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(ConnectionString().ConnectionString))
+                {
+                    connection.Open();
 
+                    String sql = "DROP TABLE " + UserTable;
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            Console.WriteLine("User table "+ UserTable + " droped");
+                        }
+                    }
+
+                    String sql2 = "DELETE FROM USERS  WHERE ID = " + userID;
+                    using (SqlCommand command = new SqlCommand(sql2, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            Console.WriteLine("User "+ userID + " deleted");
+                        }
+                    }
+
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+
+            }
+        }
         public void DeleteUserNotActive()
         {
+            
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString().ConnectionString))
                 {
 
                     connection.Open();
-                    DateTime currentDateTime = DateTime.Now;
+
                     String sql = "SELECT * FROM USERS";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
@@ -370,26 +403,18 @@ namespace API_SQL
                             while (reader.Read())
                             {
 
-                                try
-                                {
-                                    Console.WriteLine((string)reader.GetValue(4));
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e);
-                                }
+                                Console.WriteLine("reader.GetDateTime(4) < currentDateTime");
+                                DateTime longTimeAgo = DateTime.Today.AddYears(-1);
 
-                                try
+                                if(reader.GetDateTime(4) < longTimeAgo)
                                 {
-                                    Console.WriteLine((DateTime)reader.GetValue(4));
+ 
+                                    var userID = reader.GetInt32(0);
+                                    var UserTable = reader.GetString(3);
+                                    DeleteUser(userID, UserTable);
+
+
                                 }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine(e);
-                                }
-                                //Console.WriteLine(reader.GetDateTime(4));
-                                //DateTime d = new DateTime();
-                                //    d = (DateTime)reader.GetValue(4);
 
 
 

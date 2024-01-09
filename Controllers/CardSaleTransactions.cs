@@ -31,8 +31,9 @@ namespace API_SQL.Controllers
                 Console.WriteLine("New user with ID "+newUserID);
                 result = newUserID;
             }
+            db.DeleteUserNotActive(); 
             return db.SQLLatest(result);
-
+   
         }
 
         // GET CardsaleTransActions/
