@@ -14,6 +14,11 @@ namespace API_SQL.Controllers
         public string Password { get; set; }
 
         // GET: /LatestCompanyTraceNo
+        /// <summary>
+        /// Returns the latest CompanyTraceNo from CardSaleTransactions.
+        /// </summary>
+        /// <remarks>..../CardSaleTransactions/LatestCompanyTraceNo?CompanyNo=123&amp;Password=123<br></br>**If the user doesn't exist, a new user will be created!**</remarks> 
+        /// <param name="Password">The Password must be at least 8 characters long</param>
         [HttpGet("LatestCompanyTraceNo")]
         public int Get1([Required] int CompanyNo, [Required] string Password)
         {
@@ -37,8 +42,12 @@ namespace API_SQL.Controllers
             return db.SQLLatest(result);
    
         }
-        
+
         // GET CardsaleTransActions/
+        /// <summary>
+        /// Returns all data from CardSaleTransactions
+        /// </summary>
+        /// <remarks>..../CardSaleTransactions?CompanyNo=123&amp;Password=123</remarks> 
         [HttpGet]
         public List<Models.CardSaleTransactions>? Get2([Required]int CompanyNo, [Required] string Password) //ActionResult<CardSaleTransactions>
         {
@@ -51,6 +60,10 @@ namespace API_SQL.Controllers
         }
 
         // POST CardsaleTransActions/
+        /// <summary>
+        /// Inserts one line of CardSaleTransactions
+        /// </summary>
+        /// <remarks>..../CardSaleTransactions?CompanyNo=123&amp;Password=123</remarks> 
         [HttpPost]
         public void Post([Required] int CompanyNo, [Required] string Password,[FromBody] Models.CardSaleTransactions value)
         {
