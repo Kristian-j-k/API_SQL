@@ -13,7 +13,7 @@ namespace API_SQL
 
             builder.DataSource = "tcp:sweden.database.windows.net";
             builder.UserID = "test_db_gæs";
-            builder.Password = "12ahkk##";
+            builder.Password = "å3ddåÅd#d";
             builder.InitialCatalog = "test_1";
 
             return builder;
@@ -389,20 +389,16 @@ namespace API_SQL
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString().ConnectionString))
                 {
-
                     connection.Open();
 
                     String sql = "SELECT * FROM USERS";
-
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             Console.WriteLine("DeleteUserNotActive");
                             while (reader.Read())
                             {
-
                                 Console.WriteLine("reader.GetDateTime(4) < currentDateTime");
                                 DateTime longTimeAgo = DateTime.Today.AddYears(-1);
 
@@ -412,12 +408,7 @@ namespace API_SQL
                                     var userID = reader.GetInt32(0);
                                     var UserTable = reader.GetString(3);
                                     DeleteUser(userID, UserTable);
-
-
                                 }
-
-
-
                             }
 
                         }

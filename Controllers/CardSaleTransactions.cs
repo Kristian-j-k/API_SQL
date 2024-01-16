@@ -6,12 +6,12 @@
 namespace API_SQL.Controllers
 {
 
-    [Route("CardsaleTransActions/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class CardSaleTransactions : ControllerBase
     {
 
-        // GET: CardsaleTransActions/LatestCompanyTraceNo
+        // GET: /LatestCompanyTraceNo
         [HttpGet("/{CompanyNo}/{Password}/LatestCompanyTraceNo")]
         public int Get1(int CompanyNo,string Password)
         {
