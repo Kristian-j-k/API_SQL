@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace API_SQL.Controllers
 {
-
     [Route("[controller]")]
     [ApiController]
     public class CardSaleTransactions : ControllerBase
     {
+        public int CompanyNo { get; set; }
+        public string Password { get; set; }
 
         // GET: /LatestCompanyTraceNo
-        [HttpGet("/{CompanyNo}/{Password}/LatestCompanyTraceNo")]
-        public int Get1(int CompanyNo,string Password)
+        [HttpGet("LatestCompanyTraceNo")]
+        public int Get1([Required] int CompanyNo, [Required] string Password)
         {
             int result = -1;
 
@@ -35,11 +37,10 @@ namespace API_SQL.Controllers
             return db.SQLLatest(result);
    
         }
-
+        
         // GET CardsaleTransActions/
-        [HttpGet("/{CompanyNo}/{Password}")]
-
-        public List<Models.CardSaleTransactions>? Get2(int CompanyNo, string Password) //ActionResult<CardSaleTransactions>
+        [HttpGet]
+        public List<Models.CardSaleTransactions>? Get2([Required]int CompanyNo, [Required] string Password) //ActionResult<CardSaleTransactions>
         {
             DBConnect db = new DBConnect();
             int userID = db.SQLGetUser(CompanyNo, Password);
@@ -50,8 +51,8 @@ namespace API_SQL.Controllers
         }
 
         // POST CardsaleTransActions/
-        [HttpPost("/{CompanyNo}/{Password}")]
-        public void Post(int CompanyNo, string Password,[FromBody] Models.CardSaleTransactions value)
+        [HttpPost]
+        public void Post([Required] int CompanyNo, [Required] string Password,[FromBody] Models.CardSaleTransactions value)
         {
         
             DBConnect db = new DBConnect();

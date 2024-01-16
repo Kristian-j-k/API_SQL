@@ -1,5 +1,3 @@
-
-
 using API_SQL.Middelware;
 
 var builder = WebApplication.CreateBuilder(args);
