@@ -11,10 +11,10 @@ namespace API_SQL
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
-            builder.DataSource = "tcp:sweden.database.windows.net";
-            builder.UserID = "test_db_gæs";
-            builder.Password = "å3ddåÅd#d";
-            builder.InitialCatalog = "test_1";
+            builder.DataSource = "***";
+            builder.UserID = "***";
+            builder.Password = "***";
+            builder.InitialCatalog = "***";
 
             return builder;
         }
